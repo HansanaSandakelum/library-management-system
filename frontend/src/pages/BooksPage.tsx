@@ -2,13 +2,19 @@ import { useState, useEffect } from 'react';
 import { getBooks, deleteBook } from '../services/api';
 import type { Book } from '../types/book';
 import BookCard from '../components/BookCard';
+import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import { Library, Plus, Search, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState<Book | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchBooks();
@@ -25,14 +31,28 @@ export default function BooksPage() {
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (window.confirm('Are you sure you want to delete this book?')) {
-      try {
-        await deleteBook(id);
-        setBooks(books.filter((b) => b.id !== id));
-      } catch (error) {
-        console.error('Failed to delete book:', error);
-      }
+  const handleDeleteClick = (id: number) => {
+    const book = books.find(b => b.id === id);
+    if (book) {
+      setBookToDelete(book);
+      setDeleteModalOpen(true);
+    }
+  };
+
+  const executeDelete = async () => {
+    if (!bookToDelete) return;
+    setIsDeleting(true);
+    try {
+      await deleteBook(bookToDelete.id);
+      setBooks(books.filter((b) => b.id !== bookToDelete.id));
+      toast.success('Book deleted successfully');
+      setDeleteModalOpen(false);
+      setBookToDelete(null);
+    } catch (error) {
+      console.error('Failed to delete book:', error);
+      toast.error('Failed to delete book');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -108,10 +128,19 @@ export default function BooksPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredBooks.map((book) => (
-            <BookCard key={book.id} book={book} onDelete={handleDelete} />
+            <BookCard key={book.id} book={book} onDelete={handleDeleteClick} />
           ))}
         </div>
       )}
+
+      <DeleteConfirmModal 
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={executeDelete}
+        title="Delete Book"
+        message={`Are you sure you want to delete "${bookToDelete?.title}"? This action cannot be undone.`}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }

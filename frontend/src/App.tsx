@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import BooksPage from './pages/BooksPage';
 import BookFormPage from './pages/BookFormPage';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-400/20 dark:bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute top-48 -right-24 w-96 h-96 bg-purple-400/20 dark:bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
+        <Toaster position="bottom-right" />
         <Navbar />
         
         <main className="flex-1 w-full max-w-7xl mx-auto relative z-10">
