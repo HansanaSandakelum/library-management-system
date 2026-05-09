@@ -1,7 +1,7 @@
-using LibraryApi.Application.DTOs;
-using LibraryApi.Domain.Interfaces;
+using LibraryManagement.Application.DTOs;
+using LibraryManagement.Domain.Interfaces;
 
-namespace LibraryApi.Application.Services;
+namespace LibraryManagement.Application.Services;
 
 public class BookService
 {
