@@ -32,12 +32,13 @@
   .sidebar {
     @apply fixed left-0 top-0 h-full w-[220px] bg-white dark:bg-[#12141c]
       border-r border-[#edeef1] dark:border-[#1c1f2e]
-      flex flex-col z-50 transition-all duration-200;
+      flex flex-col z-50 transition-transform duration-300
+      -translate-x-full md:translate-x-0;
   }
 
   /* ── Main content ── */
   .main-content {
-    @apply ml-[220px] min-h-screen transition-all duration-200;
+    @apply ml-0 md:ml-[220px] min-h-screen transition-all duration-300;
   }
 
   /* ── Top bar ── */

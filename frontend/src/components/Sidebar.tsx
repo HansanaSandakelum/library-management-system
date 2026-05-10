@@ -1,4 +1,4 @@
-import { Library, LayoutDashboard, BookOpen, Settings, LogOut } from 'lucide-react';
+import { Library, LayoutDashboard, BookOpen, Settings, LogOut, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -12,7 +12,12 @@ const bottomNav = [
   { label: 'Settings', icon: Settings, href: '/' },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,7 +34,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
       {/* Logo */}
       <div className="flex items-center justify-between px-6 h-16 shrink-0">
         <Link to="/" className="flex items-center gap-2.5">
@@ -40,6 +45,11 @@ export default function Sidebar() {
             LibraryMS
           </span>
         </Link>
+        {onClose && (
+          <button onClick={onClose} className="md:hidden p-1.5 rounded-lg text-[#a0a3b1] hover:bg-[#f4f5f7] dark:hover:bg-[#1c1f2e] transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Main nav */}

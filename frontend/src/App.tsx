@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
 import BooksPage from './pages/BooksPage';
@@ -9,6 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
     <AuthProvider>
       <Router>
@@ -36,9 +39,16 @@ function App() {
                       },
                     }}
                   />
-                  <Sidebar />
+                  {/* Mobile Overlay */}
+                  {sidebarOpen && (
+                    <div
+                      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden transition-opacity"
+                      onClick={() => setSidebarOpen(false)}
+                    />
+                  )}
+                  <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
                   <div className="main-content flex flex-col min-h-screen">
-                    <TopBar />
+                    <TopBar onMenuClick={() => setSidebarOpen(true)} />
                     <main className="flex-1">
                       <Routes>
                         <Route path="/" element={<BooksPage />} />
