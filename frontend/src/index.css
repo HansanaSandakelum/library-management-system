@@ -16,4 +16,14 @@
   .glass-card {
     @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/20 dark:border-slate-800/50 shadow-xl;
   }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
 }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(-5deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+

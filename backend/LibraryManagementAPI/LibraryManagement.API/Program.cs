@@ -96,9 +96,32 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    // We recreate database since we added new Users table. This is safe for dev environment.
+
+    
     db.Database.EnsureDeleted();
-    db.Database.EnsureCreated(); 
+    db.Database.EnsureCreated();
+
+    // Seed users 
+    if (!db.Users.Any())
+    {
+        db.Users.AddRange(
+            new LibraryManagement.Domain.Entities.User
+            {
+                Id = 1,
+                Username = "admin",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"),
+                Role = "Admin"
+            },
+            new LibraryManagement.Domain.Entities.User
+            {
+                Id = 2,
+                Username = "user",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("user123"),
+                Role = "User"
+            }
+        );
+        db.SaveChanges();
+    }
 }
 
 // Configure the HTTP request pipeline.
