@@ -2,6 +2,7 @@ using LibraryManagement.Application.DTOs;
 using LibraryManagement.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LibraryManagement.API.Controllers;
 
@@ -43,6 +44,7 @@ public class BooksController : ControllerBase
     }
 
     // POST /api/books
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateBookDto dto)
     {
@@ -55,6 +57,7 @@ public class BooksController : ControllerBase
     }
 
     // PUT /api/books/{id}
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateBookDto dto)
     {
@@ -70,6 +73,7 @@ public class BooksController : ControllerBase
     }
 
     // DELETE /api/books/{id}
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
