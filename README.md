@@ -104,9 +104,5 @@ The system comes pre-seeded with the following accounts:
 
 ---
 
-## 🎨 UI Preview
 
-The system features a **Dynamic Theme System** that persists across sessions and sessions, ensuring a consistent user experience in both light and dark modes.
-
----
 
