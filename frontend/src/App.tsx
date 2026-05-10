@@ -3,7 +3,7 @@ import { AuthProvider } from './context/AuthContext';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
 import BooksPage from './pages/BooksPage';
-import BookFormPage from './pages/BookFormPage';
+import AllBooksPage from './pages/AllBooksPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
@@ -42,8 +42,7 @@ function App() {
                     <main className="flex-1">
                       <Routes>
                         <Route path="/" element={<BooksPage />} />
-                        <Route path="/books/new" element={<BookFormPage />} />
-                        <Route path="/books/edit/:id" element={<BookFormPage />} />
+                        <Route path="/books" element={<AllBooksPage />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                       </Routes>
                     </main>

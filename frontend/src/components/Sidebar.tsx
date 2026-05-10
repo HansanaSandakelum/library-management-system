@@ -1,11 +1,11 @@
-import { Library, LayoutDashboard, BookOpen, PlusCircle, Settings, LogOut, ChevronLeft } from 'lucide-react';
+import { Library, LayoutDashboard, BookOpen, Settings, LogOut } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const mainNav = [
   { label: 'Dashboard', icon: LayoutDashboard, href: '/' },
-  { label: 'Add Book', icon: PlusCircle, href: '/books/new' },
+  { label: 'All Books', icon: BookOpen, href: '/books' },
 ];
 
 const bottomNav = [

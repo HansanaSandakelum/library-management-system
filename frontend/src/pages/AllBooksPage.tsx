@@ -2,15 +2,11 @@ import { useState, useEffect } from "react";
 import { getBooks, deleteBook } from "../services/api";
 import type { Book } from "../types/book";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
-import StatCards from "../components/StatCards";
-import BooksTable from "../components/BooksTable";
+import BookGrid from "../components/BookGrid";
 import BookFormModal from "../components/BookFormModal";
-import { Plus, Download } from "lucide-react";
 import toast from "react-hot-toast";
-import { useAuth } from "../context/AuthContext";
 
-export default function BooksPage() {
-  const { user } = useAuth();
+export default function AllBooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -79,53 +75,10 @@ export default function BooksPage() {
       book.author.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const uniqueAuthors = new Set(books.map((b) => b.author)).size;
-  const latestBookDate =
-    books.length > 0
-      ? new Date(books[books.length - 1]?.createdAt).toLocaleDateString(undefined, {
-          month: "short",
-          day: "numeric",
-        })
-      : null;
-
   return (
-    <div className="p-6 animate-fadeIn">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <div>
-          <h1 className="text-[22px] font-bold text-[#1a1d26] dark:text-[#e2e4e9] tracking-tight">
-            Dashboard
-          </h1>
-          <p className="text-[13px] text-[#8b8fa3] dark:text-[#5a5d6e] mt-0.5">
-            Welcome back, {user?.username}. Here's what's happening today.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          <button className="btn-outline text-[12px]">
-            <Download className="w-4 h-4" />
-            Export
-          </button>
-          <button onClick={handleAddClick} className="btn-primary text-[12px]">
-            <Plus className="w-4 h-4" />
-            Add Book
-          </button>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      {!loading && (
-        <StatCards
-          totalBooks={books.length}
-          uniqueAuthors={uniqueAuthors}
-          searchResultCount={filteredBooks.length}
-          searchQuery={searchQuery}
-          latestBookDate={latestBookDate}
-        />
-      )}
-
-      {/* Books Table Section */}
-      <BooksTable
+    <div className="p-6 animate-fadeIn max-w-[1400px] mx-auto">
+      {/* Books Grid Section */}
+      <BookGrid
         books={books}
         filteredBooks={filteredBooks}
         loading={loading}
