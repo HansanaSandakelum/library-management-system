@@ -41,7 +41,7 @@ export default function Navbar() {
                 <Library className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
               </div>
               <span className="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
-                BiblioSphere
+               Library Management
               </span>
             </Link>
           </div>
