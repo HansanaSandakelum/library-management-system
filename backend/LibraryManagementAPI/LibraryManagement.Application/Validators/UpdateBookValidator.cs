@@ -3,20 +3,19 @@ using LibraryManagement.Application.DTOs;
 
 namespace LibraryManagement.Application.Validators;
 
-
 public class UpdateBookValidator : AbstractValidator<UpdateBookDto>
 {
     public UpdateBookValidator()
     {
-        RuleFor(x => x.Title)
-            .NotEmpty().WithMessage("Title is required.")
-            .MaximumLength(200).WithMessage("Title must not exceed 200 characters.");
+        RuleFor(b => b.Title)
+            .NotEmpty().WithMessage("Book title is required.")
+            .MaximumLength(200).WithMessage("Title is too long (max 200 chars).");
 
-        RuleFor(x => x.Author)
-            .NotEmpty().WithMessage("Author is required.")
-            .MaximumLength(200).WithMessage("Author must not exceed 200 characters.");
+        RuleFor(b => b.Author)
+            .NotEmpty().WithMessage("Author name is required.")
+            .MaximumLength(200).WithMessage("Author name is too long.");
 
-        RuleFor(x => x.Description)
-            .MaximumLength(1000).WithMessage("Description must not exceed 1000 characters.");
+        RuleFor(b => b.Description)
+            .MaximumLength(1000).WithMessage("Description is way too long.");
     }
 }

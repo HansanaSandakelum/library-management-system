@@ -10,34 +10,39 @@ public class ErrorHandlingMiddleware
 
     public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
     {
-        _next   = next;
+        _next = next;
         _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task Invoke(HttpContext context)
     {
         try
         {
             await _next(context);
         }
-        catch (Exception ex)
+        catch (Exception error)
         {
-            _logger.LogError(ex, "Unhandled exception caught by ErrorHandlingMiddleware.");
-            await HandleExceptionAsync(context, ex);
+            var res = context.Response;
+            res.ContentType = "application/json";
+            
+            switch(error)
+            {
+                case UnauthorizedAccessException:
+                    res.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    break;
+                case KeyNotFoundException:
+                    res.StatusCode = (int)HttpStatusCode.NotFound;
+                    break;
+                default:
+                    res.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    _logger.LogError(error, "Something went wrong processing the request");
+                    break;
+            }
+
+            var result = JsonSerializer.Serialize(new { 
+                error = error?.Message ?? "Internal Server Error"
+            });
+            await res.WriteAsync(result);
         }
-    }
-
-    private static Task HandleExceptionAsync(HttpContext context, Exception exception)
-    {
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode  = (int)HttpStatusCode.InternalServerError;
-
-        var response = new
-        {
-            status  = 500,
-            message = "An unexpected error occurred. Please try again later."
-        };
-
-        return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }
