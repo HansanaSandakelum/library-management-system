@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using LibraryManagement.Infrastructure.Persistence;
-using LibraryManagement.Application.Services;
-using LibraryManagement.Domain.Interfaces;
+
+using LibraryManagement.Application.Interfaces;
 using LibraryManagement.Infrastructure.Repositories;
 using FluentValidation;
 using LibraryManagement.Application.DTOs;
@@ -50,9 +50,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Dependency Injection
 builder.Services.AddScoped<IBookRepository, BookRepository>();
-builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<AuthService>();
+
+// Register MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LibraryManagement.Application.Features.Books.Queries.GetAllBooksQuery).Assembly));
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateBookDto>();
 

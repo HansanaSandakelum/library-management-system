@@ -1,5 +1,6 @@
 using LibraryManagement.Application.DTOs;
-using LibraryManagement.Application.Services;
+using LibraryManagement.Application.Features.Auth.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryManagement.API.Controllers;
@@ -8,17 +9,17 @@ namespace LibraryManagement.API.Controllers;
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly AuthService _authService;
+    private readonly IMediator _mediator;
 
-    public AuthController(AuthService authService)
+    public AuthController(IMediator mediator)
     {
-        _authService = authService;
+        _mediator = mediator;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
-        var result = await _authService.LoginAsync(loginDto);
+        var result = await _mediator.Send(new LoginCommand(loginDto));
         
         if (result is null)
         {

@@ -2,29 +2,30 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using LibraryManagement.Application.DTOs;
+using LibraryManagement.Application.Interfaces;
 using LibraryManagement.Domain.Entities;
-using LibraryManagement.Domain.Interfaces;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace LibraryManagement.Application.Services;
+namespace LibraryManagement.Application.Features.Auth.Commands;
 
-public class AuthService
+public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponseDto?>
 {
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
 
-    public AuthService(IUserRepository userRepository, IConfiguration configuration)
+    public LoginCommandHandler(IUserRepository userRepository, IConfiguration configuration)
     {
         _userRepository = userRepository;
         _configuration = configuration;
     }
 
-    public async Task<AuthResponseDto?> LoginAsync(LoginDto loginDto)
+    public async Task<AuthResponseDto?> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByUsernameAsync(loginDto.Username);
+        var user = await _userRepository.GetByUsernameAsync(request.LoginDto.Username);
         
-        if (user is null || !BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+        if (user is null || !BCrypt.Net.BCrypt.Verify(request.LoginDto.Password, user.PasswordHash))
         {
             return null;
         }
